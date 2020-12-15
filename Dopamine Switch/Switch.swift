@@ -58,7 +58,6 @@ struct SwitchView: View {
         VStack {
             Toggle("asdf", isOn: $switchInfo.on)
                 .toggleStyle(SwitchToggleStyle())
-                .onHover(perform: {_ in print(self.switchInfo.on)})
             switchInfo.label
         }.padding()
     }
