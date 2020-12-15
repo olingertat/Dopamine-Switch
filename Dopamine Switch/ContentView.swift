@@ -8,9 +8,12 @@
 import SwiftUI
 
 struct ContentView: View {
+//    var myswitch = MySwitch(imageName: "StatusBarButtonImage")
+    var SB = SwitchBoard()
     var body: some View {
-        Text("Hello, world!")
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+        VStack {
+            SB
+        }.frame(maxWidth: .infinity, maxHeight: .infinity)
     }
 }
 
