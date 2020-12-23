@@ -23,17 +23,17 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var statusBarItem: NSStatusItem?
 
     func applicationDidFinishLaunching(_ notification: Notification) {
+        statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
+        statusBarItem?.button?.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
+        statusBarItem?.button?.action = #selector(AppDelegate.togglePopover(_:))
         
-        let contentView = ContentView()
+        let contentView = ContentView(statusBarItem: statusBarItem)
 
         // Set the SwiftUI's ContentView to the Popover's ContentViewController
         popover.behavior = .transient
         popover.animates = false
         popover.contentViewController = NSViewController()
         popover.contentViewController?.view = NSHostingView(rootView: contentView)
-        statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusBarItem?.button?.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
-        statusBarItem?.button?.action = #selector(AppDelegate.togglePopover(_:))
     }
     @objc func showPopover(_ sender: AnyObject?) {
         if let button = statusBarItem?.button {

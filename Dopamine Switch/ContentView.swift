@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-//    var myswitch = MySwitch(imageName: "StatusBarButtonImage")
+    var statusBarItem: NSStatusItem?
     var SB = SwitchBoard()
     var body: some View {
         VStack {
