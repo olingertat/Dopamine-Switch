@@ -9,17 +9,21 @@ import Foundation
 import SwiftUI
 
 struct SwitchBoard: View {
-    @State private var theSwitches = [SwitchInfo]()
-    private var theSwitchValues: [Bool] {
-        return theSwitches.map { $0.on }
+    var statusBarItem: NSStatusItem?
+    @ObservedObject private var theSwitches = SwitchGroup()
+    private var allCompleted: Bool {
+        return theSwitches.allCompleted
     }
     var body: some View {
         ScrollView {
             VStack{
 //                ForEach(0..<theSwitches.count-1/3+1) { row in
                     HStack {
-                        ForEach(theSwitches) { theSwitch in
-                            SwitchView(switchInfo: theSwitch)
+                        ForEach(0..<theSwitches.theSwitches.count) { theSwitch in
+                            SwitchView(switchInfo: theSwitches.theSwitches[theSwitch])
+                                .onTapGesture {
+                                    theSwitches.theSwitches[theSwitch].on.toggle()
+                                }
                         }
                     }
 //                }
@@ -29,19 +33,35 @@ struct SwitchBoard: View {
                 Button(action: {self.resetSwitches()}) {Text("reset")}
             }
         }
+        .onChange(of: allCompleted, perform: { value in
+            updateStatusBar()
+        })
+    }
+    func updateStatusBar() {
+        statusBarItem?.button?.image = allCompleted ? NSImage(named:NSImage.Name("OnSwitch")) : NSImage(named:NSImage.Name("StatusBarButtonImage"))
     }
     func addSwitch(_ theSwitch: SwitchInfo) {
-        self.theSwitches.append(theSwitch)
+        self.theSwitches.theSwitches.append(theSwitch)
     }
     func resetSwitches() {
-        for i in 0...theSwitches.count-1 {
-            theSwitches[i].on = false
+        for i in 0...theSwitches.theSwitches.count-1 {
+            theSwitches.theSwitches[i].on = false
         }
     }
 }
 
-class SwitchInfo: Identifiable, ObservableObject {
-    @Published public var on: Bool = false
+class SwitchGroup: ObservableObject {
+    @Published var theSwitches = [SwitchInfo(imageName: "StatusBarButtonImage"), SwitchInfo(imageName: "StatusBarButtonImage")]
+    private var theSwitchValues: [Bool] {
+        return theSwitches.map { $0.on }
+    }
+    var allCompleted: Bool {
+        return theSwitchValues.allSatisfy({$0})
+    }
+}
+
+struct SwitchInfo: Identifiable {
+    public var on: Bool = false
     let id = UUID()
     var label: AnyView
     init(text: String) {
@@ -53,22 +73,13 @@ class SwitchInfo: Identifiable, ObservableObject {
 }
 
 struct SwitchView: View {
-    @ObservedObject var switchInfo: SwitchInfo
+    var switchInfo: SwitchInfo
     var body: some View {
         VStack {
-            Toggle("asdf", isOn: $switchInfo.on)
-                .toggleStyle(SwitchToggleStyle())
-            switchInfo.label
-        }.padding()
-    }
-}
-
-
-struct SwitchToggleStyle: ToggleStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        return Image(configuration.isOn ? "OnSwitch" : "OffSwitch")
+            Image(switchInfo.on ? "OnSwitch" : "OffSwitch")
                 .resizable()
                 .frame(width: 50.0, height: 50.0)
-            .onTapGesture { configuration.isOn.toggle() }
+            switchInfo.label
+        }.padding()
     }
 }

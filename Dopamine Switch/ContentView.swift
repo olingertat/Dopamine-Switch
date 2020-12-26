@@ -8,17 +8,13 @@
 import SwiftUI
 
 struct ContentView: View {
-    var statusBarItem: NSStatusItem?
-    var SB = SwitchBoard()
+    var SB: SwitchBoard
+    init(statusBarItem: NSStatusItem?) {
+        SB = SwitchBoard(statusBarItem: statusBarItem)
+    }
     var body: some View {
         VStack {
             SB
         }.frame(maxWidth: .infinity, maxHeight: .infinity)
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        ContentView()
     }
 }
