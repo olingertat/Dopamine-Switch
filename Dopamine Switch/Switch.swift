@@ -19,7 +19,7 @@ struct SwitchBoard: View {
             VStack{
 //                ForEach(0..<theSwitches.count-1/3+1) { row in
                     HStack {
-                        ForEach(0..<theSwitches.theSwitches.count) { theSwitch in
+                        ForEach(0..<theSwitches.theSwitches.count, id: \.self) { theSwitch in
                             SwitchView(switchInfo: theSwitches.theSwitches[theSwitch])
                                 .onTapGesture {
                                     theSwitches.theSwitches[theSwitch].on.toggle()
@@ -33,12 +33,14 @@ struct SwitchBoard: View {
                 Button(action: {self.resetSwitches()}) {Text("reset")}
             }
         }
-        .onChange(of: allCompleted, perform: { value in
+        .onChange(of: allCompleted, perform: { _ in
             updateStatusBar()
         })
     }
     func updateStatusBar() {
-        statusBarItem?.button?.image = allCompleted ? NSImage(named:NSImage.Name("OnSwitch")) : NSImage(named:NSImage.Name("StatusBarButtonImage"))
+        statusBarItem?.button?.image = allCompleted ?
+            NSImage(named:NSImage.Name("GreenLED")) :
+            NSImage(named:NSImage.Name("RedLED"))
     }
     func addSwitch(_ theSwitch: SwitchInfo) {
         self.theSwitches.theSwitches.append(theSwitch)

@@ -24,7 +24,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(_ notification: Notification) {
         statusBarItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.squareLength)
-        statusBarItem?.button?.image = NSImage(named:NSImage.Name("StatusBarButtonImage"))
+        statusBarItem?.button?.image = NSImage(named:NSImage.Name("RedLED"))
         statusBarItem?.button?.action = #selector(AppDelegate.togglePopover(_:))
         
         let contentView = ContentView(statusBarItem: statusBarItem)
