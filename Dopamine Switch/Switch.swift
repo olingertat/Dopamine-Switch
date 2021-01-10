@@ -27,7 +27,7 @@ struct SwitchBoard: View {
                         }
                     }
 //                }
-                Button(action:{self.addSwitch(SwitchInfo(imageName: "StatusBarButtonImage"))}) {
+                Button(action:{self.addSwitch(SwitchInfo(label: "test"))}) {
                     Text("Add Switch")
                 }
                 Button(action: {self.resetSwitches()}) {Text("reset")}
@@ -36,6 +36,10 @@ struct SwitchBoard: View {
         .onChange(of: allCompleted, perform: { _ in
             updateStatusBar()
         })
+    }
+    init(statusBarItem: NSStatusItem?) {
+        self.statusBarItem = statusBarItem
+        updateStatusBar() // needed to set icon if allCompleted is true
     }
     func updateStatusBar() {
         statusBarItem?.button?.image = allCompleted ?
@@ -51,7 +55,14 @@ struct SwitchBoard: View {
 }
 
 class SwitchGroup: ObservableObject {
-    @Published var theSwitches = [SwitchInfo(imageName: "StatusBarButtonImage"), SwitchInfo(imageName: "StatusBarButtonImage")]
+    @Published var theSwitches = [SwitchInfo]()
+    {
+        didSet {
+            if let data = try? PropertyListEncoder().encode(theSwitches) {
+                UserDefaults.standard.set(data, forKey: "theSwitches")
+            }
+        }
+    }
     private var theSwitchValues: [Bool] {
         return theSwitches.map { $0.on }
     }
@@ -59,6 +70,9 @@ class SwitchGroup: ObservableObject {
         return theSwitchValues.allSatisfy({$0})
     }
     init() {
+        if let data = UserDefaults.standard.data(forKey: "theSwitches") {
+            self.theSwitches = try! PropertyListDecoder().decode([SwitchInfo].self, from: data)
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(self.resetSwitches(notification:)), name: .NSCalendarDayChanged, object: nil)
     }
     @objc func resetSwitches(notification: NSNotification? = nil) {
@@ -68,16 +82,10 @@ class SwitchGroup: ObservableObject {
     }
 }
 
-struct SwitchInfo: Identifiable {
+struct SwitchInfo: Identifiable, Codable {
     public var on: Bool = false
-    let id = UUID()
-    var label: AnyView
-    init(text: String) {
-        label = AnyView(Text(text))
-    }
-    init(imageName: String) {
-        label = AnyView(Image(imageName))
-    }
+    var id = UUID()
+    var label: String
 }
 
 struct SwitchView: View {
@@ -87,7 +95,7 @@ struct SwitchView: View {
             Image(switchInfo.on ? "OnSwitch" : "OffSwitch")
                 .resizable()
                 .frame(width: 50.0, height: 50.0)
-            switchInfo.label
+            Text(switchInfo.label)
         }.padding()
     }
 }
