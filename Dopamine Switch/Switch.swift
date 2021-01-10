@@ -46,9 +46,7 @@ struct SwitchBoard: View {
         self.theSwitches.theSwitches.append(theSwitch)
     }
     func resetSwitches() {
-        for i in 0...theSwitches.theSwitches.count-1 {
-            theSwitches.theSwitches[i].on = false
-        }
+        theSwitches.resetSwitches()
     }
 }
 
@@ -59,6 +57,14 @@ class SwitchGroup: ObservableObject {
     }
     var allCompleted: Bool {
         return theSwitchValues.allSatisfy({$0})
+    }
+    init() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.resetSwitches(notification:)), name: .NSCalendarDayChanged, object: nil)
+    }
+    @objc func resetSwitches(notification: NSNotification? = nil) {
+        for i in 0...theSwitches.count-1 {
+            theSwitches[i].on = false
+        }
     }
 }
 
