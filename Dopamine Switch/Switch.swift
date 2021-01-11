@@ -5,7 +5,6 @@
 //  Created by Oliver's probook on 12/4/20.
 //
 
-import Foundation
 import SwiftUI
 
 struct SwitchBoard: View {
