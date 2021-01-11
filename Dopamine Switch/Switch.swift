@@ -15,7 +15,7 @@ struct SwitchBoard: View {
     }
     @State private var showAddPopover: Bool = false
     @State private var showRemovePopover: Bool = false
-    @State private var activityName: String = ""
+    @State private var switchName: String = ""
     var body: some View {
         ScrollView {
             VStack{
@@ -39,23 +39,23 @@ struct SwitchBoard: View {
         HStack {
             Button("Add") {
                 self.showAddPopover = true
-                activityName = ""
+                switchName = ""
             }.popover(isPresented: self.$showAddPopover, arrowEdge: .bottom) {
                 VStack {
-                    TextField("Activity Name", text: $activityName)
+                    TextField("Activity Name", text: $switchName)
                         .padding()
-                    Button("Add Switch", action: { addSwitch(activityName) })
+                    Button("Add Switch", action: { addSwitch(switchName) })
                 }
                     .frame(width:150, height: 100)
             }
             Button("Remove") {
                 self.showRemovePopover = true
-                activityName = ""
+                switchName = ""
             }.popover(isPresented: self.$showRemovePopover, arrowEdge: .bottom) {
                 VStack {
-                    TextField("Activity Name", text: $activityName)
+                    TextField("Activity Name", text: $switchName)
                         .padding()
-                    Button("Remove Switch", action: { removeLastSwitchWithName(activityName) })
+                    Button("Remove Switch", action: { removeLastSwitchWithName(switchName) })
                 }
                     .frame(width:150, height: 100)
             }
