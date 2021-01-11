@@ -14,28 +14,57 @@ struct SwitchBoard: View {
     private var allCompleted: Bool {
         return theSwitches.allCompleted
     }
+    @State private var showAddPopover: Bool = false
+    @State private var showRemovePopover: Bool = false
+    @State private var activityName: String = ""
     var body: some View {
         ScrollView {
             VStack{
-//                ForEach(0..<theSwitches.count-1/3+1) { row in
+                ForEach(0..<theSwitches.theSwitches.count-1/3+1, id: \.self) { row in
                     HStack {
-                        ForEach(0..<theSwitches.theSwitches.count, id: \.self) { theSwitch in
-                            SwitchView(switchInfo: theSwitches.theSwitches[theSwitch])
-                                .onTapGesture {
-                                    theSwitches.theSwitches[theSwitch].on.toggle()
-                                }
+                        ForEach(0...2, id: \.self) { col in
+                            if (3*row+col < theSwitches.theSwitches.count) {
+                                SwitchView(switchInfo: theSwitches.theSwitches[3*row+col])
+                                    .onTapGesture {
+                                        theSwitches.theSwitches[3*row+col].on.toggle()
+                                    }
+                            }
                         }
                     }
-//                }
-                Button(action:{self.addSwitch(SwitchInfo(label: "test"))}) {
-                    Text("Add Switch")
                 }
-                Button(action: {self.resetSwitches()}) {Text("reset")}
             }
         }
         .onChange(of: allCompleted, perform: { _ in
             updateStatusBar()
         })
+        HStack {
+            Button("Add") {
+                self.showAddPopover = true
+                activityName = ""
+            }.popover(isPresented: self.$showAddPopover, arrowEdge: .bottom) {
+                VStack {
+                    TextField("Activity Name", text: $activityName)
+                        .padding()
+                    Button("Add Switch", action: { addSwitch(activityName) })
+                }
+                    .frame(width:150, height: 100)
+            }
+            Button("Remove") {
+                self.showRemovePopover = true
+                activityName = ""
+            }.popover(isPresented: self.$showRemovePopover, arrowEdge: .bottom) {
+                VStack {
+                    TextField("Activity Name", text: $activityName)
+                        .padding()
+                    Button("Remove Switch", action: { removeLastSwitchWithName(activityName) })
+                }
+                    .frame(width:150, height: 100)
+            }
+            Button("Quit", action: quitClicked)
+        }
+    }
+    func quitClicked() {
+        NSApplication.shared.terminate(self)
     }
     init(statusBarItem: NSStatusItem?) {
         var dateChangeSinceLastRun = true
@@ -57,7 +86,14 @@ struct SwitchBoard: View {
             NSImage(named:NSImage.Name("RedLED"))
     }
     func addSwitch(_ theSwitch: SwitchInfo) {
-        self.theSwitches.theSwitches.append(theSwitch)
+        self.theSwitches.addSwitch(theSwitch)
+    }
+    func addSwitch(_ theSwitch: String) {
+        let newSwitchInfo = SwitchInfo(label: theSwitch)
+        self.theSwitches.addSwitch(newSwitchInfo)
+    }
+    func removeLastSwitchWithName(_ switchName: String) {
+        self.theSwitches.removeLastSwitchWithName(switchName)
     }
     func resetSwitches() {
         theSwitches.resetSwitches()
@@ -87,6 +123,17 @@ class SwitchGroup: ObservableObject {
             self.theSwitches = try! PropertyListDecoder().decode([SwitchInfo].self, from: data)
         }
         NotificationCenter.default.addObserver(self, selector: #selector(self.resetSwitches(notification:)), name: .NSCalendarDayChanged, object: nil)
+    }
+    func addSwitch(_ theSwitch: SwitchInfo) {
+        self.theSwitches.append(theSwitch)
+    }
+    func removeLastSwitchWithName(_ switchName: String) {
+        for i in 1...theSwitches.count {
+            if theSwitches[theSwitches.count - i].label == switchName {
+                theSwitches.remove(at: theSwitches.count - i)
+                return
+            }
+        }
     }
     @objc func resetSwitches(notification: NSNotification? = nil) {
         for i in 0...theSwitches.count-1 {
