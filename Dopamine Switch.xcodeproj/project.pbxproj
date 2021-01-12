@@ -10,7 +10,8 @@
 		4C36EFBA2576E5B80061503B /* Dopamine_SwitchApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C36EFB92576E5B80061503B /* Dopamine_SwitchApp.swift */; };
 		4C36EFBE2576E5B90061503B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C36EFBD2576E5B90061503B /* Assets.xcassets */; };
 		4C36EFC12576E5B90061503B /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4C36EFC02576E5B90061503B /* Preview Assets.xcassets */; };
-		4C36EFCB257B221C0061503B /* Switch.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C36EFCA257B221C0061503B /* Switch.swift */; };
+		4C36EFCB257B221C0061503B /* SwitchBoardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C36EFCA257B221C0061503B /* SwitchBoardView.swift */; };
+		4C7DD5D825AE1BDF00E5B59A /* SwitchBoardModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4C7DD5D725AE1BDF00E5B59A /* SwitchBoardModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,7 +21,8 @@
 		4C36EFC02576E5B90061503B /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		4C36EFC22576E5B90061503B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4C36EFC32576E5B90061503B /* Dopamine_Switch.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Dopamine_Switch.entitlements; sourceTree = "<group>"; };
-		4C36EFCA257B221C0061503B /* Switch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Switch.swift; sourceTree = "<group>"; };
+		4C36EFCA257B221C0061503B /* SwitchBoardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardView.swift; sourceTree = "<group>"; };
+		4C7DD5D725AE1BDF00E5B59A /* SwitchBoardModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchBoardModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,7 +56,8 @@
 			isa = PBXGroup;
 			children = (
 				4C36EFB92576E5B80061503B /* Dopamine_SwitchApp.swift */,
-				4C36EFCA257B221C0061503B /* Switch.swift */,
+				4C36EFCA257B221C0061503B /* SwitchBoardView.swift */,
+				4C7DD5D725AE1BDF00E5B59A /* SwitchBoardModel.swift */,
 				4C36EFBD2576E5B90061503B /* Assets.xcassets */,
 				4C36EFC22576E5B90061503B /* Info.plist */,
 				4C36EFC32576E5B90061503B /* Dopamine_Switch.entitlements */,
@@ -140,7 +143,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4C36EFCB257B221C0061503B /* Switch.swift in Sources */,
+				4C36EFCB257B221C0061503B /* SwitchBoardView.swift in Sources */,
+				4C7DD5D825AE1BDF00E5B59A /* SwitchBoardModel.swift in Sources */,
 				4C36EFBA2576E5B80061503B /* Dopamine_SwitchApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -27,7 +27,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         statusBarItem?.button?.image = NSImage(named:NSImage.Name("RedLED"))
         statusBarItem?.button?.action = #selector(AppDelegate.togglePopover(_:))
         
-        let contentView = SwitchBoard(statusBarItem: statusBarItem)
+        let contentView = SwitchBoardView(statusBarItem: statusBarItem)
 
         // Set the SwiftUI's ContentView to the Popover's ContentViewController
         popover.behavior = .transient
