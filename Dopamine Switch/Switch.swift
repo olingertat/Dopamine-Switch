@@ -40,7 +40,6 @@ struct SwitchBoard: View {
     init(statusBarItem: NSStatusItem?) {
         var dateChangeSinceLastRun = true
         if let lastSwitchDate = UserDefaults.standard.string(forKey: "lastSwitchDate") {
-            print("properly loaded, lastSwitchDate: \(lastSwitchDate)")
             let df = DateFormatter()
             df.dateFormat = "dd/MM/yyyy"
             if df.string(from: Date()) == lastSwitchDate {
