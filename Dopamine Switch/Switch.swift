@@ -10,7 +10,7 @@ import SwiftUI
 
 struct SwitchBoard: View {
     var statusBarItem: NSStatusItem?
-    @ObservedObject private var theSwitches = SwitchGroup()
+    @ObservedObject private var theSwitches: SwitchGroup
     private var allCompleted: Bool {
         return theSwitches.allCompleted
     }
@@ -38,8 +38,19 @@ struct SwitchBoard: View {
         })
     }
     init(statusBarItem: NSStatusItem?) {
+        var dateChangeSinceLastRun = true
+        if let lastSwitchDate = UserDefaults.standard.string(forKey: "lastSwitchDate") {
+            print("properly loaded, lastSwitchDate: \(lastSwitchDate)")
+            let df = DateFormatter()
+            df.dateFormat = "dd/MM/yyyy"
+            if df.string(from: Date()) == lastSwitchDate {
+                dateChangeSinceLastRun = false
+            }
+        }
         self.statusBarItem = statusBarItem
-        updateStatusBar() // needed to set icon if allCompleted is true
+        self.theSwitches = SwitchGroup()
+        if dateChangeSinceLastRun { resetSwitches() }
+        updateStatusBar() // needed to set green icon if allCompleted is true
     }
     func updateStatusBar() {
         statusBarItem?.button?.image = allCompleted ?
@@ -61,6 +72,9 @@ class SwitchGroup: ObservableObject {
             if let data = try? PropertyListEncoder().encode(theSwitches) {
                 UserDefaults.standard.set(data, forKey: "theSwitches")
             }
+            let df = DateFormatter()
+            df.dateFormat = "dd/MM/yyyy"
+            UserDefaults.standard.set(df.string(from: Date()), forKey: "lastSwitchDate")
         }
     }
     private var theSwitchValues: [Bool] {
